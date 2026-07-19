@@ -7,6 +7,13 @@ FIELDS = ['Agreement Value', 'Agreement Start Date', 'Agreement End Date', 'Rene
 def compute_recall(gold_csv, pred_csv):
     g = pd.read_csv(gold_csv)
     p = pd.read_csv(pred_csv)
+    
+    # Handle both 'File Name' and 'file_name' columns
+    if 'File Name' in g.columns:
+        g['file_name'] = g['File Name']
+    if 'File Name' in p.columns:
+        p['file_name'] = p['File Name']
+    
     # align by file_name
     merged = g.merge(p, on='file_name', suffixes=('_gold', '_pred'))
     stats = {}
@@ -14,7 +21,7 @@ def compute_recall(gold_csv, pred_csv):
         gold_col = f + '_gold'
         pred_col = f + '_pred'
         if gold_col not in merged.columns or pred_col not in merged.columns:
-            stats[f] = {'true': 0, 'false': len(merged)}
+            stats[f] = {'true': 0, 'false': len(merged), 'recall': 0.0}
             continue
         true = ((merged[gold_col].fillna('').astype(str).str.strip()) == (merged[pred_col].fillna('').astype(str).str.strip())).sum()
         false = len(merged) - true
