@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+# system deps for OCR and pdf conversion
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tesseract-ocr \
+    poppler-utils \
+    build-essential \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+COPY . /app
+
+ENV FLASK_APP=src.app
+EXPOSE 5000
+
+CMD ["gunicorn", "src.app:app", "-b", "0.0.0.0:5000", "--workers", "2"]

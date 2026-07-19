@@ -1,0 +1,16 @@
+[Unit]
+Description=Document Extractor Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/path/to/your/project
+ExecStart=/path/to/your/project/start.sh
+Restart=on-failure
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+
+# NOTE: Replace `/path/to/your/project` and `User` as appropriate for your host.

@@ -1,0 +1,14 @@
+__pycache__/
+.venv/
+venv/
+*.pyc
+*.pyo
+cache/
+predictions.csv
+predictions_*.csv
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+__MACOSX/
+/.vscode/
