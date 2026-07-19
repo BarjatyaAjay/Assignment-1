@@ -5,9 +5,16 @@ import os
 
 
 def ocr_image(path):
-    img = Image.open(path).convert('RGB')
-    text = pytesseract.image_to_string(img)
-    return text
+    try:
+        img = Image.open(path).convert('RGB')
+        text = pytesseract.image_to_string(img)
+        return text
+    except pytesseract.pytesseract.TesseractNotFoundError:
+        # If tesseract is not available, return a placeholder
+        # In production, this should use an alternative OCR service (e.g., Cloud Vision, Azure OCR)
+        return f"[OCR not available for {os.path.basename(path)}]"
+    except Exception as e:
+        return f"[Error extracting text: {str(e)}]"
 
 
 def extract_docx(path):
